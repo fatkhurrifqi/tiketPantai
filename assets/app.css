@@ -1,0 +1,217 @@
+/* =============================================================
+   TiketPantai — Global polish & micro-interactions
+   Dimuat bersama Tailwind (browser CDN). Hanya berisi hal yang
+   tidak mudah dilakukan dengan utility class: animasi, gradient
+   berlapis, scrollbar, dan helper komponen.
+   ============================================================= */
+
+:root {
+  --tp-teal: #14b8a6;
+  --tp-teal-deep: #0d9488;
+  --tp-cyan: #22d3ee;
+  --tp-ink: #0f172a;
+  --tp-shadow: 0 10px 30px -12px rgba(13, 148, 136, 0.25);
+  --tp-shadow-lg: 0 24px 60px -20px rgba(15, 23, 42, 0.28);
+}
+
+/* ---------- Base ---------- */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Selaraskan heading: gunakan balance agar baris lebih rapi */
+h1, h2, h3 {
+  text-wrap: balance;
+}
+
+p { text-wrap: pretty; }
+
+/* ---------- Custom scrollbar (subtle, branding teal) ---------- */
+* { scrollbar-width: thin; scrollbar-color: #99f6e4 transparent; }
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #5eead4, #2dd4bf);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover { background: #14b8a6; background-clip: content-box; }
+
+/* ---------- Hero glow: gradient berlapis + kilau lembut ---------- */
+.tp-hero {
+  background-color: #0d9488;
+  background-image:
+    radial-gradient(60% 80% at 85% 10%, rgba(34, 211, 238, 0.55) 0%, transparent 60%),
+    radial-gradient(50% 70% at 10% 90%, rgba(20, 184, 166, 0.55) 0%, transparent 55%),
+    linear-gradient(135deg, #0f766e 0%, #14b8a6 45%, #06b6d4 100%);
+  position: relative;
+}
+.tp-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(120% 90% at 50% -10%, rgba(255, 255, 255, 0.18), transparent 45%);
+}
+
+/* Floating decorative blobs (opsional, tambah class .tp-hero-blob) */
+.tp-hero-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(40px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ---------- Scroll reveal ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- Card hover: angkat halus ---------- */
+.tp-card {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.35s ease;
+}
+.tp-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--tp-shadow-lg);
+}
+
+/* Zoom gambar pada kartu destinasi saat hover */
+.tp-zoom { overflow: hidden; }
+.tp-zoom img {
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+.tp-zoom:hover img { transform: scale(1.08); }
+
+/* ---------- Tombol: kilau + tekan ---------- */
+.tp-btn {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+.tp-btn::before {
+  content: "";
+  position: absolute;
+  top: 0; left: -120%;
+  width: 60%; height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+}
+.tp-btn:hover::before { left: 140%; }
+.tp-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -10px rgba(13, 148, 136, 0.6); }
+.tp-btn:active { transform: translateY(0); }
+
+/* Gradient utama untuk tombol CTA */
+.tp-btn-gradient {
+  background-image: linear-gradient(135deg, #14b8a6 0%, #06b6d4 100%);
+}
+.tp-btn-gradient:hover {
+  background-image: linear-gradient(135deg, #0d9488 0%, #0891b2 100%);
+}
+
+/* ---------- Badge glass ---------- */
+.tp-badge-glass {
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+/* ---------- Stat card pada hero ---------- */
+.tp-stat {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 1rem;
+}
+
+/* ---------- Floating animation (untuk ikon/dekoratif) ---------- */
+@keyframes tp-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.tp-float { animation: tp-float 4s ease-in-out infinite; }
+
+/* ---------- Navbar: shadow muncul setelah scroll ---------- */
+.tp-nav { transition: box-shadow 0.3s ease, background-color 0.3s ease; }
+.tp-nav.tp-nav--scrolled {
+  box-shadow: 0 8px 30px -16px rgba(15, 23, 42, 0.35);
+  background-color: rgba(255, 255, 255, 0.92);
+}
+
+/* ---------- Skeleton shimmer untuk gambar (opsional) ---------- */
+@keyframes tp-shimmer {
+  100% { transform: translateX(100%); }
+}
+
+/* ---------- Hero slideshow (background foto pantai, autoplay) ---------- */
+.tp-slides { position: absolute; inset: 0; overflow: hidden; }
+.tp-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1.6s ease-in-out;
+  will-change: opacity;
+}
+.tp-slide.is-active {
+  opacity: 1;
+  z-index: 1;
+  animation: tp-kenburns 7s ease-out forwards;
+}
+@keyframes tp-kenburns {
+  0%   { transform: scale(1.04); }
+  100% { transform: scale(1.16); }
+}
+
+/* Overlay: teks tetap terbaca + selaras tema teal */
+.tp-hero-overlay {
+  background-image:
+    linear-gradient(90deg, rgba(4,47,46,0.90) 0%, rgba(13,148,136,0.66) 48%, rgba(8,145,178,0.42) 100%),
+    linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0) 32%, rgba(0,0,0,0) 78%);
+}
+
+/* Dots navigasi slideshow */
+.tp-dots { display: inline-flex; align-items: center; gap: 0.5rem; }
+.tp-dot {
+  width: 9px; height: 9px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.45);
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: width 0.35s ease, background-color 0.35s ease;
+}
+.tp-dot:hover { background: rgba(255, 255, 255, 0.78); }
+.tp-dot.is-active { width: 26px; background: #ffffff; }
+
+/* ---------- Aksesibilitas: hormati reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .tp-card, .tp-zoom img, .tp-btn, .tp-btn::before, .tp-float { transition: none !important; animation: none !important; }
+  .tp-btn::before { display: none; }
+  .tp-slide { animation: none !important; transform: none !important; transition: none !important; }
+}

@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php index.php)",
+      "Bash(php -r '$_GET[\"wisata\"]=\"pantai-klothok\"; $_SERVER[\"REQUEST_METHOD\"]=\"GET\"; chdir\\(\"C:/laragon/www/php-backend\"\\); include \"destination.php\";')",
+      "Bash(echo \"EXIT: $?\")",
+      "Read(//tmp/**)",
+      "Bash(php -r '$pdo=require \"C:/laragon/www/php-backend/db.php\"; $s=$pdo->prepare\\(\"SELECT id,slug,is_active FROM destinations WHERE slug=? LIMIT 1\"\\); $s->execute\\([\"pantai-klothok\"]\\); var_export\\($s->fetch\\(\\)\\);')",
+      "Bash(php *)",
+      "Bash(echo \"EXIT: $? bytes:\")",
+      "Bash(node --check assets/app.js)",
+      "Bash(xargs echo \"initSlideshow refs:\")"
+    ]
+  }
+}
